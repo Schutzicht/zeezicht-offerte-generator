@@ -253,5 +253,25 @@ document.addEventListener('DOMContentLoaded', () => {
         preview.closing.textContent = state.closingText;
     }
 
+    // PRINT HANDLER
+    window.printQuote = function () {
+        const originalTitle = document.title;
+        const client = state.companyName || state.clientName || 'Klant';
+        const number = state.quoteNumber || 'Concept';
+
+        // Sanitize filename (remove special chars)
+        const safeClient = client.replace(/[^a-z0-9\s-]/gi, '').trim();
+        const safeNumber = number.replace(/[^a-z0-9\s-]/gi, '').trim();
+
+        document.title = `Offerte ${safeClient} - ${safeNumber}`;
+
+        window.print();
+
+        // Restore title after a small delay to ensure print dialog picked it up
+        setTimeout(() => {
+            document.title = originalTitle;
+        }, 1000);
+    };
+
     init();
 });
