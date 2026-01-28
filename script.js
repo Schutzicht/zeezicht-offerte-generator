@@ -179,10 +179,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const vat = subtotal * 0.21;
         const total = subtotal + vat;
 
-        // Add refund note for monthly items
-        const footerNote = isMonthly
-            ? '<p style="font-size: 0.8rem; color: var(--slate-text); margin-top: 0.5rem; font-style: italic;">* Facturatie per jaar vooruit. Bij tussentijdse opzegging wordt het teveel betaalde bedrag gerestitueerd.</p>'
-            : '';
+        // Add notes based on type
+        let footerNote = '';
+        if (isMonthly) {
+            footerNote = '<p style="font-size: 0.8rem; color: var(--slate-text); margin-top: 0.5rem; font-style: italic;">* Facturatie per jaar vooruit. Bij tussentijdse opzegging wordt het teveel betaalde bedrag gerestitueerd.</p>';
+        } else {
+            footerNote = '<p style="font-size: 0.8rem; color: var(--slate-text); margin-top: 0.5rem; font-style: italic;">* Betalingstermijn: 50% bij akkoord, 50% bij oplevering.</p>';
+        }
 
         return `
             <div class="quote-section">
