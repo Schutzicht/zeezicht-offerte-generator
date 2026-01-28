@@ -149,20 +149,28 @@ document.addEventListener('DOMContentLoaded', () => {
     window.updateItemCtx = updateItem;
     window.removeItemCtx = removeItem;
 
-    function generateTableHtml(title, items) {
+    function generateTableHtml(title, items, isMonthly = false) {
         if (items.length === 0) return '';
 
         let subtotal = 0;
         let rowsHtml = '';
 
         items.forEach(item => {
-            const lineTotal = item.qty * item.rate;
+            // For monthly items, we calculate the annual total (12 months)
+            const multiplier = isMonthly ? 12 : 1;
+            const lineTotal = item.qty * item.rate * multiplier;
             subtotal += lineTotal;
+
+            // Format rate display
+            const rateDisplay = isMonthly
+                ? `${formatCurrency(item.rate)} p/m`
+                : formatCurrency(item.rate);
+
             rowsHtml += `
                 <tr>
                     <td>${item.desc || '-'}</td>
                     <td class="text-center">${item.qty}</td>
-                    <td class="text-right">${formatCurrency(item.rate)}</td>
+                    <td class="text-right">${rateDisplay}</td>
                     <td class="text-right">${formatCurrency(lineTotal)}</td>
                 </tr>
             `;
@@ -170,6 +178,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const vat = subtotal * 0.21;
         const total = subtotal + vat;
+
+        // Add refund note for monthly items
+        const footerNote = isMonthly
+            ? '<p style="font-size: 0.8rem; color: var(--slate-text); margin-top: 0.5rem; font-style: italic;">* Facturatie per jaar vooruit. Bij tussentijdse opzegging wordt het teveel betaalde bedrag gerestitueerd.</p>'
+            : '';
 
         return `
             <div class="quote-section">
@@ -180,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <th class="col-desc">Omschrijving</th>
                             <th class="col-qty">Aantal</th>
                             <th class="col-rate">Tarief</th>
-                            <th class="col-total">Totaal</th>
+                            <th class="col-total">Totaal (12 mnd)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -201,6 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </tr>
                     </tfoot>
                 </table>
+                ${footerNote}
             </div>
         `;
     }
@@ -227,8 +241,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Generate Tables
         let html = '';
-        html += generateTableHtml('Eenmalige investering', oneTimeItems);
-        html += generateTableHtml('Maandelijkse kosten', monthlyItems);
+        html += generateTableHtml('Eenmalige investering', oneTimeItems, false);
+        html += generateTableHtml('Jaarlijkse kosten (vooraf gefactureerd)', monthlyItems, true);
 
         preview.tablesContainer.innerHTML = html;
 
