@@ -192,13 +192,15 @@ textarea:focus {
     min-height: 297mm;
     background: white;
     padding: 15mm 20mm;
-    /* Standard margins */
     display: flex;
     flex-direction: column;
     font-size: 10pt;
     margin: 30px auto;
-    /* Print Exact Scaling */
+    position: relative;
     overflow: hidden;
+    /* Force background print */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
 }
 
 .a4-page::before {
@@ -207,14 +209,14 @@ textarea:focus {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%;
-    height: 80%;
+    width: 65%;
+    height: 65%;
     background-image: url('logo.svg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    opacity: 0.03;
-    /* Very subtle transparency */
+    opacity: 0.08;
+    /* Increased visibility */
     z-index: 0;
     pointer-events: none;
 }
