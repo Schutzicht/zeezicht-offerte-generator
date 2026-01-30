@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
         companyName: '',
         address: '',
         zipCity: '',
+        quoteTitle: 'Offerte',
         quoteNumber: `OFF-${new Date().getFullYear()}-001`,
         quoteDate: new Date().toISOString().split('T')[0],
         expiryDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // +14 days default
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         companyName: document.getElementById('companyName'),
         address: document.getElementById('address'),
         zipCity: document.getElementById('zipCity'),
+        quoteTitle: document.getElementById('quoteTitle'),
         quoteNumber: document.getElementById('quoteNumber'),
         quoteDate: document.getElementById('quoteDate'),
         expiryDate: document.getElementById('expiryDate'),
@@ -31,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const preview = {
         client: document.getElementById('previewClient'),
+        title: document.getElementById('previewTitle'),
         number: document.getElementById('previewNumber'),
         date: document.getElementById('previewDate'),
         expiry: document.getElementById('previewExpiry'),
@@ -45,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         form.companyName.value = state.companyName;
         form.address.value = state.address;
         form.zipCity.value = state.zipCity;
+        form.quoteTitle.value = state.quoteTitle;
         form.quoteNumber.value = state.quoteNumber;
         form.quoteDate.value = state.quoteDate;
         form.expiryDate.value = state.expiryDate;
@@ -58,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // EVENT LISTENERS
     function setupListeners() {
         // Text Inputs
-        ['clientName', 'companyName', 'address', 'zipCity', 'quoteNumber', 'quoteDate', 'expiryDate', 'closingText'].forEach(key => {
+        ['clientName', 'companyName', 'address', 'zipCity', 'quoteTitle', 'quoteNumber', 'quoteDate', 'expiryDate', 'closingText'].forEach(key => {
             form[key].addEventListener('input', (e) => {
                 state[key] = e.target.value;
                 updatePreview();
@@ -234,6 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
         preview.client.innerHTML = clientHtml;
 
         // Meta
+        preview.title.textContent = state.quoteTitle || 'Offerte';
         preview.number.textContent = state.quoteNumber || '-';
         preview.date.textContent = formatDate(state.quoteDate);
         preview.expiry.textContent = formatDate(state.expiryDate);
@@ -272,13 +277,15 @@ document.addEventListener('DOMContentLoaded', () => {
     window.printQuote = function () {
         const originalTitle = document.title;
         const client = state.companyName || state.clientName || 'Klant';
+        const docTitle = state.quoteTitle || 'Offerte';
         const number = state.quoteNumber || 'Concept';
 
         // Sanitize filename (remove special chars)
         const safeClient = client.replace(/[^a-z0-9\s-]/gi, '').trim();
+        const safeDocTitle = docTitle.replace(/[^a-z0-9\s-]/gi, '').trim();
         const safeNumber = number.replace(/[^a-z0-9\s-]/gi, '').trim();
 
-        document.title = `Offerte ${safeClient} - ${safeNumber}`;
+        document.title = `${safeDocTitle} ${safeClient} - ${safeNumber}`;
 
         window.print();
 

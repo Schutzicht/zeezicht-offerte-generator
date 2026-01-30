@@ -196,8 +196,32 @@ textarea:focus {
     display: flex;
     flex-direction: column;
     font-size: 10pt;
-    position: relative;
+    margin: 30px auto;
     /* Print Exact Scaling */
+    overflow: hidden;
+}
+
+.a4-page::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    background-image: url('logo.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.03;
+    /* Very subtle transparency */
+    z-index: 0;
+    pointer-events: none;
+}
+
+.a4-page>* {
+    position: relative;
+    z-index: 1;
 }
 
 /* QUOTE CONTENT STYLES */
