@@ -203,22 +203,20 @@ textarea:focus {
     print-color-adjust: exact;
 }
 
-.a4-page::before {
-    content: '';
+/* Watermark as real image */
+.watermark-bg {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 65%;
-    height: 65%;
-    background-image: url('logo.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    opacity: 0.08;
-    /* Increased visibility */
+    width: 70%;
+    height: auto;
+    opacity: 0.12;
+    /* Slightly higher for visibility */
     z-index: 0;
     pointer-events: none;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
 }
 
 .a4-page>* {
