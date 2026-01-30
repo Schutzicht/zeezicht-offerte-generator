@@ -250,7 +250,22 @@ document.addEventListener('DOMContentLoaded', () => {
         preview.tablesContainer.innerHTML = html;
 
         // Closing
-        preview.closing.textContent = state.closingText;
+        // 1. Escape HTML
+        const safeText = state.closingText
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+
+        // 2. Linkify URLs (simple regex that avoids trailing parenthesis)
+        const linkedText = safeText.replace(
+            /((https?:\/\/|www\.)[^\s)]+)/g,
+            (url) => {
+                const href = url.startsWith('http') ? url : `https://${url}`;
+                return `<a href="${href}" target="_blank" style="text-decoration:underline; color:inherit;">${url}</a>`;
+            }
+        );
+
+        preview.closing.innerHTML = linkedText;
     }
 
     // PRINT HANDLER
