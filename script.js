@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 1, type: 'onetime', desc: 'Website Ontwikkeling', qty: 1, rate: 1250 },
             { id: 2, type: 'monthly', desc: 'Hosting & Onderhoud', qty: 1, rate: 25 }
         ],
-        closingText: 'Graag zien we uw akkoord tegemoet.\n\nOp al onze offertes en overeenkomsten zijn onze algemene voorwaarden van toepassing. Door ondertekening van deze offerte gaat u hiermee akkoord.\n\nMocht u vragen hebben naar aanleiding van deze offerte, neem dan gerust contact met ons op.'
+        closingText: 'Graag zien we uw akkoord tegemoet.\n\nOp al onze offertes en overeenkomsten zijn onze algemene voorwaarden van toepassing (zie: www.zee-zicht.nl/algemene-voorwaarden/). Door ondertekening van deze offerte gaat u hiermee akkoord.\n\nMocht u vragen hebben naar aanleiding van deze offerte, neem dan gerust contact met ons op.'
     };
 
     // DOM ELEMENTS
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <th class="col-desc">Omschrijving</th>
                             <th class="col-qty">Aantal</th>
                             <th class="col-rate">Tarief</th>
-                            <th class="col-total">Totaal (12 mnd)</th>
+                            <th class="col-total">${isMonthly ? 'Totaal (12 mnd)' : 'Totaal'}</th>
                         </tr>
                     </thead>
                     <tbody>
