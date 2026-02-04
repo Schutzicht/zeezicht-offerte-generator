@@ -30,6 +30,23 @@
             </header>
 
             <form id="quoteForm">
+                <!-- TEMPLATE SELECTION -->
+                <section class="form-section">
+                    <h2>Type Offerte</h2>
+                    <div class="form-group">
+                        <label>Selecteer een basis-template</label>
+                        <select id="templateSelect" class="template-select"
+                            style="width: 100%; padding: 0.8rem; border: 2px solid var(--theme-accent); border-radius: 4px; font-weight: bold;">
+                            <option value="website">Nieuwe Website</option>
+                            <option value="advertisement">Advertentiecampagne (Ads)</option>
+                            <option value="custom">Lege Offerte (Handmatig)</option>
+                        </select>
+                        <p style="font-size: 0.8rem; color: var(--slate-text); margin-top: 0.4rem; font-style: italic;">
+                            * Let op: het wisselen van template vervangt de huidige regels en voorwaarden.
+                        </p>
+                    </div>
+                </section>
+
                 <!-- CLIENT DETAILS -->
                 <section class="form-section">
                     <h2>Klantgegevens</h2>
@@ -84,6 +101,27 @@
                         <!-- Items will be injected here via JS -->
                     </div>
                     <button type="button" id="addItemBtn" class="btn btn-secondary">+ Regel toevoegen</button>
+
+                    <div class="discount-input-container"
+                        style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--soft-sky);">
+                        <div class="form-group" style="max-width: 200px;">
+                            <label for="discountPercent">Korting (%)</label>
+                            <input type="number" id="discountPercent" value="0" min="0" max="100" step="1">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CONDITIONS/DISCLAIMERS -->
+                <section class="form-section">
+                    <h2>Afspraken & Voorwaarden</h2>
+                    <div id="conditionsContainer" class="conditions-grid">
+                        <!-- Checkboxes injected via JS -->
+                    </div>
+                    <div class="custom-condition-input">
+                        <input type="text" id="customConditionInput" placeholder="Eigen afspraak toevoegen...">
+                        <button type="button" id="addCustomConditionBtn"
+                            class="btn btn-secondary btn-sm">Toevoegen</button>
+                    </div>
                 </section>
 
                 <!-- TERMS -->
@@ -105,9 +143,6 @@ Mocht u vragen hebben naar aanleiding van deze offerte, neem dan gerust contact 
         <div class="preview-panel">
             <div class="paper-wrapper">
                 <div id="quotePreview" class="a4-page">
-                    <!-- WATERMARK (Real image for better print support) -->
-                    <img src="logo.svg" class="watermark-bg" aria-hidden="true">
-
                     <!-- HEADER -->
                     <header class="quote-header">
                         <div class="brand-col">
@@ -115,6 +150,7 @@ Mocht u vragen hebben naar aanleiding van deze offerte, neem dan gerust contact 
                             <div class="company-details">
                                 <strong>Zee-zicht Media</strong><br>
                                 Klarinetweg 45, 4337 RB Middelburg<br>
+                                IBAN: NL28 RABO 0124 5847 99<br>
                                 <br>
                                 info@zee-zicht.nl<br>
                                 www.zee-zicht.nl
@@ -149,6 +185,17 @@ Mocht u vragen hebben naar aanleiding van deze offerte, neem dan gerust contact 
                         </div>
                     </div>
 
+                    <div class="header-wave">
+                        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+                            <path
+                                d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5,73.84-4.36,147.54,16.88,218.4,38.5,100.75,30.77,204,47.66,310.3,35.1,107.51-12.7,202.48-52.5,306.5-73.1V0Z"
+                                style="fill: var(--theme-accent); opacity: 0.1;"></path>
+                            <path
+                                d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.51,22.43-10.89,44.78-23.83,57.51-45.33V0Z"
+                                style="fill: var(--theme-accent); opacity: 0.05;"></path>
+                        </svg>
+                    </div>
+
                     <div class="intro-text">
                         <p>Hierbij ontvangt u de offerte voor de besproken diensten. Wij kijken ernaar uit om samen met
                             u aan de slag te gaan.</p>
@@ -162,6 +209,10 @@ Mocht u vragen hebben naar aanleiding van deze offerte, neem dan gerust contact 
                     <!-- FOOTER -->
                     <div class="quote-footer">
                         <h3>Akkoordverklaring</h3>
+                        <div id="previewConditionsContainer" class="quote-conditions">
+                            <!-- Selected conditions injected via JS -->
+                        </div>
+
                         <p id="previewClosing">Graag zien we uw akkoord tegemoet. Mocht u vragen hebben naar aanleiding
                             van deze offerte, neem dan gerust contact met ons op.</p>
 

@@ -13,11 +13,78 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 1, type: 'onetime', desc: 'Website Ontwikkeling', qty: 1, rate: 1250 },
             { id: 2, type: 'monthly', desc: 'Hosting & Onderhoud', qty: 1, rate: 25 }
         ],
+        discountPercent: 0,
+        selectedConditions: [1, 2, 3, 5], // Default selected IDs
+        customConditions: [], // Manual additions
         closingText: 'Graag zien we uw akkoord tegemoet.\n\nOp al onze offertes en overeenkomsten zijn onze algemene voorwaarden van toepassing (zie: www.zee-zicht.nl/algemene-voorwaarden/). Door ondertekening van deze offerte gaat u hiermee akkoord.\n\nMocht u vragen hebben naar aanleiding van deze offerte, neem dan gerust contact met ons op.'
+    };
+
+    const CONDITIONS = [
+        // ALGEMEEN
+        { id: 4, category: 'Algemeen', text: 'De offerte is 14 dagen geldig na dagtekening.' },
+        { id: 8, category: 'Algemeen', text: 'Bronbestanden en werkbestanden blijven eigendom van Zee-zicht Media.' },
+        { id: 9, category: 'Algemeen', text: 'Oplevertermijnen zijn indicatief en afhankelijk van tijdige feedback/aanlevering.' },
+        { id: 11, category: 'Algemeen', text: 'Werkzaamheden buiten scope worden uitgevoerd op basis van nacalculatie.' },
+        { id: 13, category: 'Algemeen', text: 'Niet aansprakelijk voor schade door foutieve/onvolledige content van klant.' },
+        { id: 14, category: 'Algemeen', text: 'Niet verantwoordelijk voor storingen bij externe partijen (hosting, plugins, API\'s).' },
+        { id: 15, category: 'Algemeen', text: 'Klant ontvangt na oplevering en betaling alle toegang tot accounts/website.' },
+        { id: 2, category: 'Algemeen', text: 'Marketing en SEO is niet inbegrepen bij de offerte, dit kan los worden afgenomen.' },
+        { id: 5, category: 'Algemeen', text: 'Content (teksten/afbeeldingen) dient door de klant te worden aangeleverd.' },
+
+        // WEBSITE
+        { id: 1, category: 'Website', text: 'Website is na volledige betaling eigendom van de klant.' },
+        { id: 3, category: 'Website', text: 'Inclusief 2 correctierondes op het design/ontwikkeling.' },
+        { id: 6, category: 'Website', text: 'Hosting en domeinregistratie worden jaarlijks vooraf gefactureerd.' },
+        { id: 7, category: 'Website', text: 'Exclusief kosten voor betaalde plugins, fonts of externe API\'s.' },
+        { id: 10, category: 'Website', text: 'Tot 14 dagen na oplevering gratis correcties op bugs of fouten (nazorg).' },
+        { id: 12, category: 'Website', text: 'Hosting & onderhoud omvat technische updates, geen inhoudelijke wijzigingen.' },
+
+        // ADVERTENTIES
+        { id: 16, category: 'Advertenties', text: 'Excl. advertentiebudget (wordt direct door Meta/Google van uw rekening afgeschreven).' },
+        { id: 17, category: 'Advertenties', text: 'Minimale afname van advertentie-beheer is 3 maanden.' },
+        { id: 18, category: 'Advertenties', text: 'Resultaten uit campagnes zijn mede afhankelijk van externe factoren en platform-wijzigingen.' },
+        { id: 19, category: 'Advertenties', text: 'Klant dient toegang te verlenen tot het benodigde Advertentie-account en Business Manager.' },
+        { id: 20, category: 'Advertenties', text: 'Advertentiecontent dient te voldoen aan het beleid van de betreffende platforms.' },
+        { id: 21, category: 'Advertenties', text: 'Maandelijkse rapportage over de behaalde resultaten en optimalisaties.' }
+    ];
+
+    const TEMPLATES = {
+        website: {
+            themeColor: '#0891b2', // Cyan
+            oneTimeTitle: 'Eenmalige investering',
+            monthlyTitle: 'Jaarlijkse kosten (vooraf gefactureerd)',
+            payTerms: 'Betalingstermijn: 50% bij akkoord, 50% bij oplevering.',
+            items: [
+                { id: 1, type: 'onetime', desc: 'Website Ontwikkeling', qty: 1, rate: 1250 },
+                { id: 2, type: 'monthly', desc: 'Hosting & Onderhoud', qty: 1, rate: 25 }
+            ],
+            conditions: [4, 15, 1, 3, 5, 10]
+        },
+        advertisement: {
+            themeColor: '#0891b2', // Back to Cyan
+            oneTimeTitle: 'Kosten (eenmalig)',
+            monthlyTitle: 'Kosten (maandelijks)',
+            payTerms: 'Betalingstermijn: 50% vooraf en resterende na afloop van campagne.',
+            items: [
+                { id: 1, type: 'onetime', desc: 'Campagne Strategie & Set-up', qty: 1, rate: 450 },
+                { id: 2, type: 'monthly', desc: 'Maandelijks Beheer & Optimalisatie', qty: 1, rate: 150 },
+                { id: 3, type: 'onetime', desc: 'Tracking & Pixel Implementatie', qty: 1, rate: 150 }
+            ],
+            conditions: [4, 15, 16, 17, 18, 19, 20, 21] // IDs checked: 4(14d), 15(Access), 16-21(Ads specific)
+        },
+        custom: {
+            themeColor: '#0891b2', // Back to Cyan
+            oneTimeTitle: 'Eenmalige investering',
+            monthlyTitle: 'Doorlopende kosten',
+            payTerms: 'Betalingstermijn: 50% bij akkoord, 50% bij oplevering.',
+            items: [],
+            conditions: []
+        }
     };
 
     // DOM ELEMENTS
     const form = {
+        templateSelect: document.getElementById('templateSelect'),
         clientName: document.getElementById('clientName'),
         companyName: document.getElementById('companyName'),
         address: document.getElementById('address'),
@@ -28,7 +95,11 @@ document.addEventListener('DOMContentLoaded', () => {
         expiryDate: document.getElementById('expiryDate'),
         closingText: document.getElementById('closingText'),
         itemsContainer: document.getElementById('itemsContainer'),
-        addItemBtn: document.getElementById('addItemBtn')
+        addItemBtn: document.getElementById('addItemBtn'),
+        conditionsContainer: document.getElementById('conditionsContainer'),
+        customConditionInput: document.getElementById('customConditionInput'),
+        addCustomConditionBtn: document.getElementById('addCustomConditionBtn'),
+        discountPercent: document.getElementById('discountPercent')
     };
 
     const preview = {
@@ -38,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         date: document.getElementById('previewDate'),
         expiry: document.getElementById('previewExpiry'),
         tablesContainer: document.getElementById('previewTablesContainer'),
+        conditionsContainer: document.getElementById('previewConditionsContainer'),
         closing: document.getElementById('previewClosing')
     };
 
@@ -53,8 +125,11 @@ document.addEventListener('DOMContentLoaded', () => {
         form.quoteDate.value = state.quoteDate;
         form.expiryDate.value = state.expiryDate;
         form.closingText.value = state.closingText;
+        form.templateSelect.value = 'website'; // Default starting template
+        form.discountPercent.value = state.discountPercent;
 
         renderItems();
+        renderConditions();
         updatePreview();
         setupListeners();
     }
@@ -62,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // EVENT LISTENERS
     function setupListeners() {
         // Text Inputs
-        ['clientName', 'companyName', 'address', 'zipCity', 'quoteTitle', 'quoteNumber', 'quoteDate', 'expiryDate', 'closingText'].forEach(key => {
+        ['clientName', 'companyName', 'address', 'zipCity', 'quoteTitle', 'quoteNumber', 'quoteDate', 'expiryDate', 'closingText', 'discountPercent'].forEach(key => {
             form[key].addEventListener('input', (e) => {
                 state[key] = e.target.value;
                 updatePreview();
@@ -73,9 +148,48 @@ document.addEventListener('DOMContentLoaded', () => {
         form.addItemBtn.addEventListener('click', () => {
             addItem();
         });
+
+        // Add Custom Condition
+        form.addCustomConditionBtn.addEventListener('click', () => {
+            addCustomCondition();
+        });
+
+        form.customConditionInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addCustomCondition();
+        });
+
+        // Template Selection
+        form.templateSelect.addEventListener('change', (e) => {
+            if (confirm('Weet u zeker dat u een ander template wilt laden? Dit vervangt uw huidige regels.')) {
+                applyTemplate(e.target.value);
+            } else {
+                // Reset select to current if cancelled (optional, but better UX)
+            }
+        });
     }
 
     // LOGIC
+    function applyTemplate(type) {
+        const template = TEMPLATES[type];
+        if (!template) return;
+
+        // Apply theme color
+        document.documentElement.style.setProperty('--theme-accent', template.themeColor);
+
+        // Clone items to avoid reference issues
+        state.items = template.items.map(item => ({
+            ...item,
+            id: Date.now() + Math.random() // new unique IDs
+        }));
+
+        state.selectedConditions = [...template.conditions];
+        state.customConditions = []; // Clear custom entries when switching templates
+
+        renderItems();
+        renderConditions();
+        updatePreview();
+    }
+
     function addItem() {
         const newItem = {
             id: Date.now(),
@@ -103,6 +217,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function addCustomCondition() {
+        const text = form.customConditionInput.value.trim();
+        if (text) {
+            const newCond = {
+                id: `custom-${Date.now()}`,
+                text: text
+            };
+            state.customConditions.push(newCond);
+            form.customConditionInput.value = '';
+            renderConditions();
+            updatePreview();
+        }
+    }
+
+    function removeCustomCondition(id) {
+        state.customConditions = state.customConditions.filter(c => c.id !== id);
+        renderConditions();
+        updatePreview();
+    }
+
     function formatCurrency(amount) {
         return new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' }).format(amount);
     }
@@ -120,27 +254,28 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = document.createElement('div');
             div.className = 'line-item-row';
             div.innerHTML = `
-                <div class="form-group" style="grid-column: span 4; display:flex; gap:1rem; margin-bottom: 0px; align-items: center;">
-                    <select onchange="window.updateItemCtx(${item.id}, 'type', this.value)" style="flex:0 0 120px; font-size:0.85rem; padding: 0.4rem; border-color:var(--primary-cyan); background-color: white;">
+                <div class="form-group">
+                    <label>Type</label>
+                    <select onchange="window.updateItemCtx(${item.id}, 'type', this.value)">
                         <option value="onetime" ${item.type === 'onetime' ? 'selected' : ''}>Eenmalig</option>
                         <option value="monthly" ${item.type === 'monthly' ? 'selected' : ''}>Maandelijks</option>
+                        <option value="hourly" ${item.type === 'hourly' ? 'selected' : ''}>Uurbasis</option>
                     </select>
                 </div>
-                <!-- Row Break for grid -->
-                <div class="form-group" style="grid-column: 1 / 2;">
+                <div class="form-group">
                     <label>Omschrijving</label>
                     <input type="text" value="${item.desc}" oninput="window.updateItemCtx(${item.id}, 'desc', this.value)" placeholder="Dienst of product">
                 </div>
-                <div class="form-group" style="grid-column: 2 / 3;">
+                <div class="form-group">
                     <label>Aantal</label>
                     <input type="number" value="${item.qty}" oninput="window.updateItemCtx(${item.id}, 'qty', this.value)" step="0.5">
                 </div>
-                <div class="form-group" style="grid-column: 3 / 4;">
+                <div class="form-group">
                     <label>Tarief (€)</label>
                     <input type="number" value="${item.rate}" oninput="window.updateItemCtx(${item.id}, 'rate', this.value)">
                 </div>
-                <div class="form-group" style="grid-column: 4 / 5; padding-bottom:2px;">
-                     <button type="button" class="btn btn-danger" onclick="window.removeItemCtx(${item.id})" style="padding: 0.5rem;">
+                <div class="form-group">
+                     <button type="button" class="btn btn-danger" onclick="window.removeItemCtx(${item.id})" style="padding: 0.7rem; margin-top: auto;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                      </button>
                 </div>
@@ -149,26 +284,96 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function renderConditions() {
+        form.conditionsContainer.innerHTML = '';
+
+        // Group Predefined by category
+        const categories = ['Algemeen', 'Website', 'Advertenties'];
+        categories.forEach(cat => {
+            const catConditions = CONDITIONS.filter(c => c.category === cat);
+            if (catConditions.length > 0) {
+                const header = document.createElement('h4');
+                header.style.fontSize = '0.75rem';
+                header.style.marginTop = '1rem';
+                header.style.marginBottom = '0.5rem';
+                header.style.color = 'var(--deep-teal)';
+                header.style.textTransform = 'uppercase';
+                header.textContent = cat;
+                form.conditionsContainer.appendChild(header);
+
+                catConditions.forEach(cond => {
+                    const isChecked = state.selectedConditions.includes(cond.id);
+                    const label = document.createElement('label');
+                    label.className = 'condition-checkbox-label';
+                    label.innerHTML = `
+                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="window.toggleConditionCtx(${cond.id})">
+                        <span>${cond.text}</span>
+                    `;
+                    form.conditionsContainer.appendChild(label);
+                });
+            }
+        });
+
+        // Custom section header if any
+        if (state.customConditions.length > 0) {
+            const header = document.createElement('h4');
+            header.style.fontSize = '0.75rem';
+            header.style.marginTop = '1rem';
+            header.style.marginBottom = '0.5rem';
+            header.style.color = 'var(--deep-teal)';
+            header.style.textTransform = 'uppercase';
+            header.textContent = 'Eigen Afspraken';
+            form.conditionsContainer.appendChild(header);
+        }
+
+        // Custom items
+        state.customConditions.forEach(cond => {
+            const div = document.createElement('div');
+            div.className = 'condition-item';
+            div.innerHTML = `
+                <label class="condition-checkbox-label" style="flex:1">
+                    <input type="checkbox" checked disabled>
+                    <span>${cond.text}</span>
+                </label>
+                <button type="button" class="remove-condition-btn" onclick="window.removeCustomConditionCtx('${cond.id}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            `;
+            form.conditionsContainer.appendChild(div);
+        });
+    }
+
+    function toggleCondition(id) {
+        if (state.selectedConditions.includes(id)) {
+            state.selectedConditions = state.selectedConditions.filter(cid => cid !== id);
+        } else {
+            state.selectedConditions.push(id);
+        }
+        updatePreview();
+    }
+
     // Global context helpers
     window.updateItemCtx = updateItem;
     window.removeItemCtx = removeItem;
+    window.toggleConditionCtx = toggleCondition;
+    window.removeCustomConditionCtx = removeCustomCondition;
 
-    function generateTableHtml(title, items, isMonthly = false) {
+    function generateTableHtml(title, items, isMonthly = false, customNote = null) {
         if (items.length === 0) return '';
 
         let subtotal = 0;
         let rowsHtml = '';
 
         items.forEach(item => {
-            // For monthly items, we calculate the annual total (12 months)
+            // multipliers: monthly = 12, hourly = 1 (just qty * rate), onetime = 1
             const multiplier = isMonthly ? 12 : 1;
             const lineTotal = item.qty * item.rate * multiplier;
             subtotal += lineTotal;
 
             // Format rate display
-            const rateDisplay = isMonthly
-                ? `${formatCurrency(item.rate)} p/m`
-                : formatCurrency(item.rate);
+            let rateDisplay = formatCurrency(item.rate);
+            if (isMonthly) rateDisplay += ' p/m';
+            if (item.type === 'hourly') rateDisplay += ' p/u';
 
             rowsHtml += `
                 <tr>
@@ -180,15 +385,28 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         });
 
-        const vat = subtotal * 0.21;
-        const total = subtotal + vat;
+        const discountEnabled = state.discountPercent > 0;
+        const discountAmount = subtotal * (state.discountPercent / 100);
+        const subtotalAfterDiscount = subtotal - discountAmount;
+        const vat = subtotalAfterDiscount * 0.21;
+        const total = subtotalAfterDiscount + vat;
 
-        // Add notes based on type
+        let discountRowHtml = '';
+        if (discountEnabled) {
+            discountRowHtml = `
+                <tr class="summary-row">
+                    <td colspan="3" class="text-right">Korting (${state.discountPercent}%)</td>
+                    <td class="text-right">-${formatCurrency(discountAmount)}</td>
+                </tr>
+            `;
+        }
+
         let footerNote = '';
         if (isMonthly) {
             footerNote = '<p style="font-size: 0.8rem; color: var(--slate-text); margin-top: 0.5rem; font-style: italic;">* Facturatie per jaar vooruit. Bij tussentijdse opzegging wordt het teveel betaalde bedrag gerestitueerd.</p>';
         } else {
-            footerNote = '<p style="font-size: 0.8rem; color: var(--slate-text); margin-top: 0.5rem; font-style: italic;">* Betalingstermijn: 50% bij akkoord, 50% bij oplevering.</p>';
+            const note = customNote || 'Betalingstermijn: 50% bij akkoord, 50% bij oplevering.';
+            footerNote = `<p style="font-size: 0.8rem; color: var(--slate-text); margin-top: 0.5rem; font-style: italic;">* ${note}</p>`;
         }
 
         return `
@@ -211,13 +429,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td colspan="3" class="text-right">Subtotaal</td>
                             <td class="text-right">${formatCurrency(subtotal)}</td>
                         </tr>
+                        ${discountRowHtml}
                         <tr class="summary-row">
                             <td colspan="3" class="text-right">BTW (21%)</td>
                             <td class="text-right">${formatCurrency(vat)}</td>
                         </tr>
                          <tr class="total-row">
                             <td colspan="3" class="text-right">Totaal</td>
-                            <td class="text-right" style="color:var(--primary-cyan)">${formatCurrency(total)}</td>
+                            <td class="text-right" style="color:var(--theme-accent)">${formatCurrency(total)}</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -244,15 +463,36 @@ document.addEventListener('DOMContentLoaded', () => {
         preview.expiry.textContent = formatDate(state.expiryDate);
 
         // Split items
-        const oneTimeItems = state.items.filter(i => i.type === 'onetime');
+        const oneTimeItems = state.items.filter(i => i.type === 'onetime' || i.type === 'hourly');
         const monthlyItems = state.items.filter(i => i.type === 'monthly');
 
         // Generate Tables
         let html = '';
-        html += generateTableHtml('Eenmalige investering', oneTimeItems, false);
-        html += generateTableHtml('Jaarlijkse kosten (vooraf gefactureerd)', monthlyItems, true);
+        const currentTemplate = TEMPLATES[form.templateSelect.value] || TEMPLATES.custom;
+
+        html += generateTableHtml(currentTemplate.oneTimeTitle, oneTimeItems, false, currentTemplate.payTerms);
+        html += generateTableHtml(currentTemplate.monthlyTitle, monthlyItems, true);
 
         preview.tablesContainer.innerHTML = html;
+
+        // Conditions
+        if (state.selectedConditions.length > 0 || state.customConditions.length > 0) {
+            const predefinedText = CONDITIONS
+                .filter(c => state.selectedConditions.includes(c.id))
+                .map(c => `<li>${c.text}</li>`)
+                .join('');
+
+            const customText = state.customConditions
+                .map(c => `<li>${c.text}</li>`)
+                .join('');
+
+            preview.conditionsContainer.innerHTML = `
+                <h4>Aanvullende afspraken</h4>
+                <ul>${predefinedText}${customText}</ul>
+            `;
+        } else {
+            preview.conditionsContainer.innerHTML = '';
+        }
 
         // Closing
         // 1. Escape HTML
