@@ -441,10 +441,6 @@ textarea:focus {
     color: var(--slate-text);
 }
 
-.quote-section {
-    page-break-inside: avoid;
-    break-inside: avoid;
-}
 
 .section-title {
     font-size: 1.1rem;
@@ -462,7 +458,6 @@ textarea:focus {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 3rem;
-    page-break-inside: avoid;
 }
 
 .quote-table tr {
@@ -651,7 +646,12 @@ textarea:focus {
         box-shadow: none;
     }
 
+    .quote-footer {
+        margin-top: 3rem !important;
+    }
+
     .a4-page {
+        display: block;
         width: 100%;
         min-height: auto;
         padding: 10mm 15mm;
