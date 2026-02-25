@@ -441,6 +441,11 @@ textarea:focus {
     color: var(--slate-text);
 }
 
+.quote-section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
 .section-title {
     font-size: 1.1rem;
     color: var(--charcoal-navy);
@@ -448,6 +453,8 @@ textarea:focus {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    page-break-after: avoid;
+    break-after: avoid;
 }
 
 /* TABLE STYLING */
@@ -456,6 +463,11 @@ textarea:focus {
     border-collapse: collapse;
     margin-bottom: 3rem;
     page-break-inside: avoid;
+}
+
+.quote-table tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
 }
 
 .quote-table th {
