@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         quoteNumber: `OFF-${new Date().getFullYear()}-001`,
         quoteDate: new Date().toISOString().split('T')[0],
         expiryDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // +14 days default
+        introText: 'Hierbij ontvangt u de offerte voor de besproken diensten. Wij kijken ernaar uit om samen met u aan de slag te gaan.',
         items: [
             { id: 1, type: 'onetime', desc: 'Website Ontwikkeling', qty: 1, rate: 1250 },
             { id: 2, type: 'monthly', desc: 'Hosting & Onderhoud', qty: 1, rate: 25 }
@@ -93,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         quoteNumber: document.getElementById('quoteNumber'),
         quoteDate: document.getElementById('quoteDate'),
         expiryDate: document.getElementById('expiryDate'),
+        introText: document.getElementById('introText'),
         closingText: document.getElementById('closingText'),
         itemsContainer: document.getElementById('itemsContainer'),
         addItemBtn: document.getElementById('addItemBtn'),
@@ -108,6 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         number: document.getElementById('previewNumber'),
         date: document.getElementById('previewDate'),
         expiry: document.getElementById('previewExpiry'),
+        introText: document.getElementById('previewIntro'),
         tablesContainer: document.getElementById('previewTablesContainer'),
         conditionsContainer: document.getElementById('previewConditionsContainer'),
         closing: document.getElementById('previewClosing')
@@ -124,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
         form.quoteNumber.value = state.quoteNumber;
         form.quoteDate.value = state.quoteDate;
         form.expiryDate.value = state.expiryDate;
+        form.introText.value = state.introText;
         form.closingText.value = state.closingText;
         form.templateSelect.value = 'website'; // Default starting template
         form.discountPercent.value = state.discountPercent;
@@ -137,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // EVENT LISTENERS
     function setupListeners() {
         // Text Inputs
-        ['clientName', 'companyName', 'address', 'zipCity', 'quoteTitle', 'quoteNumber', 'quoteDate', 'expiryDate', 'closingText', 'discountPercent'].forEach(key => {
+        ['clientName', 'companyName', 'address', 'zipCity', 'quoteTitle', 'quoteNumber', 'quoteDate', 'expiryDate', 'introText', 'closingText', 'discountPercent'].forEach(key => {
             form[key].addEventListener('input', (e) => {
                 state[key] = e.target.value;
                 updatePreview();
@@ -195,6 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: Date.now(),
             type: 'onetime', // default
             desc: '',
+            details: '',
             qty: 1,
             rate: 0
         };
@@ -212,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateItem(id, key, value) {
         const item = state.items.find(i => i.id === id);
         if (item) {
-            item[key] = (key === 'desc' || key === 'type') ? value : parseFloat(value) || 0;
+            item[key] = (key === 'desc' || key === 'type' || key === 'details') ? value : parseFloat(value) || 0;
             updatePreview();
         }
     }
@@ -278,6 +283,10 @@ document.addEventListener('DOMContentLoaded', () => {
                      <button type="button" class="btn btn-danger" onclick="window.removeItemCtx(${item.id})" style="padding: 0.7rem; margin-top: auto;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                      </button>
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1; margin-top: 0.5rem; margin-bottom: 0 !important;">
+                    <label>Specificaties (optioneel, één per regel)</label>
+                    <textarea rows="2" placeholder="- Specificatie 1\n- Specificatie 2" oninput="window.updateItemCtx(${item.id}, 'details', this.value)" style="font-size: 0.85rem;">${item.details || ''}</textarea>
                 </div>
             `;
             form.itemsContainer.appendChild(div);
@@ -375,9 +384,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isMonthly) rateDisplay += ' p/m';
             if (item.type === 'hourly') rateDisplay += ' p/u';
 
+            let detailsHtml = '';
+            if (item.details && item.details.trim() !== '') {
+                const bulletLines = item.details.split('\n').filter(line => line.trim() !== '');
+                if (bulletLines.length > 0) {
+                    const bullets = bulletLines.map(line => `<li>${line.startsWith('-') ? line.substring(1).trim() : line}</li>`).join('');
+                    detailsHtml = `<ul style="margin-top: 0.4rem; margin-bottom: 0; padding-left: 1.2rem; font-size: 0.85rem; color: var(--slate-text);">${bullets}</ul>`;
+                }
+            }
+
             rowsHtml += `
                 <tr>
-                    <td>${item.desc || '-'}</td>
+                    <td>
+                        <div style="font-weight: 500;">${item.desc || '-'}</div>
+                        ${detailsHtml}
+                    </td>
                     <td class="text-center">${item.qty}</td>
                     <td class="text-right">${rateDisplay}</td>
                     <td class="text-right">${formatCurrency(lineTotal)}</td>
@@ -474,6 +495,14 @@ document.addEventListener('DOMContentLoaded', () => {
         html += generateTableHtml(currentTemplate.monthlyTitle, monthlyItems, true);
 
         preview.tablesContainer.innerHTML = html;
+
+        // Intro Text
+        const safeIntro = (state.introText || '')
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/\n/g, "<br>");
+        preview.introText.innerHTML = safeIntro;
 
         // Conditions
         if (state.selectedConditions.length > 0 || state.customConditions.length > 0) {
