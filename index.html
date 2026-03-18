@@ -114,10 +114,16 @@
                     <button type="button" id="addItemBtn" class="btn btn-secondary" data-i18n="addLine">+ Regel toevoegen</button>
 
                     <div class="discount-input-container"
-                        style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--soft-sky);">
-                        <div class="form-group" style="max-width: 200px;">
+                        style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--soft-sky); display: flex; gap: 2rem; align-items: flex-end;">
+                        <div class="form-group" style="max-width: 200px; margin-bottom: 0;">
                             <label for="discountPercent" data-i18n="discount">Korting (%)</label>
                             <input type="number" id="discountPercent" value="0" min="0" max="100" step="1">
+                        </div>
+                        <div class="form-group" style="max-width: 300px; margin-bottom: 0;">
+                            <label class="condition-checkbox-label" style="margin-bottom: 0.5rem;">
+                                <input type="checkbox" id="includeVat" checked>
+                                <span data-i18n="includeVatLabel">Bereken 21% BTW</span>
+                            </label>
                         </div>
                     </div>
                 </section>

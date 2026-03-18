@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
             switchLangConfirm: 'Wisselen van taal herstelt de standaardteksten voor dit template. Doorgaan?', 
             switchTemplateConfirm: 'Weet u zeker dat u een ander template wilt laden? Dit vervangt uw huidige regels.',
             monthlyFootnote: '* Facturatie per jaar vooruit. Bij tussentijdse opzegging wordt het teveel betaalde bedrag gerestitueerd.', 
-            catGeneral: 'Algemeen', catWebsite: 'Website', catAds: 'Advertenties', catCustom: 'Eigen Afspraken', quoteDefaultTitle: 'Offerte'
+            catGeneral: 'Algemeen', catWebsite: 'Website', catAds: 'Advertenties', catCustom: 'Eigen Afspraken', quoteDefaultTitle: 'Offerte',
+            includeVatLabel: 'Bereken 21% BTW'
         },
         en: {
             editorTitle: 'Quote Editor', downloadPdf: 'Download PDF', typeQuote: 'Quote Type', 
@@ -46,7 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
             switchLangConfirm: 'Switching language will reset the default template texts. Continue?', 
             switchTemplateConfirm: 'Are you sure you want to load a different template? This will replace your current lines.',
             monthlyFootnote: '* Invoiced annually in advance. In case of early termination, the overpaid amount will be refunded.', 
-            catGeneral: 'General', catWebsite: 'Website', catAds: 'Advertising', catCustom: 'Custom Agreements', quoteDefaultTitle: 'Quote'
+            catGeneral: 'General', catWebsite: 'Website', catAds: 'Advertising', catCustom: 'Custom Agreements', quoteDefaultTitle: 'Quote',
+            includeVatLabel: 'Calculate 21% VAT'
         }
     };
 
@@ -67,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 2, type: 'monthly', desc: 'Hosting & Onderhoud', qty: 1, rate: 25 }
         ],
         discountPercent: 0,
+        includeVat: true,
         selectedConditions: [1, 2, 3, 5], // Default selected IDs
         customConditions: [], // Manual additions
         closingText: I18N.nl.defaultClosing
@@ -173,6 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
         customConditionInput: document.getElementById('customConditionInput'),
         addCustomConditionBtn: document.getElementById('addCustomConditionBtn'),
         discountPercent: document.getElementById('discountPercent'),
+        includeVat: document.getElementById('includeVat'),
         langSelect: document.getElementById('langSelect')
     };
 
@@ -203,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         form.closingText.value = state.closingText;
         form.templateSelect.value = 'website'; // Default starting template
         form.discountPercent.value = state.discountPercent;
+        if(form.includeVat) form.includeVat.checked = state.includeVat;
         if(form.langSelect) form.langSelect.value = state.language;
 
         applyTranslations(); // Set initial lang texts
@@ -251,6 +256,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 updatePreview();
             });
         });
+
+        if (form.includeVat) {
+            form.includeVat.addEventListener('change', (e) => {
+                state.includeVat = e.target.checked;
+                updatePreview();
+            });
+        }
 
         // Add Item Button
         form.addItemBtn.addEventListener('click', () => {
@@ -525,7 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const discountEnabled = state.discountPercent > 0;
         const discountAmount = subtotal * (state.discountPercent / 100);
         const subtotalAfterDiscount = subtotal - discountAmount;
-        const vat = subtotalAfterDiscount * 0.21;
+        const vat = state.includeVat ? subtotalAfterDiscount * 0.21 : 0;
         const total = subtotalAfterDiscount + vat;
 
         let discountRowHtml = '';
@@ -534,6 +546,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 <tr class="summary-row">
                     <td colspan="3" class="text-right">${t.discount} (${state.discountPercent}%)</td>
                     <td class="text-right">-${formatCurrency(discountAmount)}</td>
+                </tr>
+            `;
+        }
+
+        let vatRowHtml = '';
+        if (state.includeVat) {
+            vatRowHtml = `
+                <tr class="summary-row">
+                    <td colspan="3" class="text-right">${t.vat}</td>
+                    <td class="text-right">${formatCurrency(vat)}</td>
                 </tr>
             `;
         }
@@ -567,10 +589,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td class="text-right">${formatCurrency(subtotal)}</td>
                         </tr>
                         ${discountRowHtml}
-                        <tr class="summary-row">
-                            <td colspan="3" class="text-right">${t.vat}</td>
-                            <td class="text-right">${formatCurrency(vat)}</td>
-                        </tr>
+                        ${vatRowHtml}
                          <tr class="total-row">
                             <td colspan="3" class="text-right">${t.total}</td>
                             <td class="text-right" style="color:var(--theme-accent)">${formatCurrency(total)}</td>
