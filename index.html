@@ -17,7 +17,13 @@
         <!-- LEFT PANEL: EDITOR -->
         <div class="editor-panel">
             <header class="editor-header">
-                <h1>Offerte Editor</h1>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <h1 data-i18n="editorTitle">Offerte Editor</h1>
+                    <select id="langSelect" style="padding: 0.3rem 0.6rem; border-radius: 4px; border: 1px solid var(--theme-accent); font-weight: bold; cursor: pointer; background: white; font-family: inherit;">
+                        <option value="nl">NL</option>
+                        <option value="en">EN</option>
+                    </select>
+                </div>
                 <button id="printBtn" class="btn btn-primary" onclick="window.printQuote()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -25,23 +31,23 @@
                         <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
                         <rect x="6" y="14" width="12" height="8"></rect>
                     </svg>
-                    Download PDF
+                    <span data-i18n="downloadPdf">Download PDF</span>
                 </button>
             </header>
 
             <form id="quoteForm">
                 <!-- TEMPLATE SELECTION -->
                 <section class="form-section">
-                    <h2>Type Offerte</h2>
+                    <h2 data-i18n="typeQuote">Type Offerte</h2>
                     <div class="form-group">
-                        <label>Selecteer een basis-template</label>
+                        <label data-i18n="selectTemplate">Selecteer een basis-template</label>
                         <select id="templateSelect" class="template-select"
                             style="width: 100%; padding: 0.8rem; border: 2px solid var(--theme-accent); border-radius: 4px; font-weight: bold;">
-                            <option value="website">Nieuwe Website</option>
-                            <option value="advertisement">Advertentiecampagne (Ads)</option>
-                            <option value="custom">Lege Offerte (Handmatig)</option>
+                            <option value="website" data-i18n="templateWebsite">Nieuwe Website</option>
+                            <option value="advertisement" data-i18n="templateAds">Advertentiecampagne (Ads)</option>
+                            <option value="custom" data-i18n="templateCustom">Lege Offerte (Handmatig)</option>
                         </select>
-                        <p style="font-size: 0.8rem; color: var(--slate-text); margin-top: 0.4rem; font-style: italic;">
+                        <p data-i18n="templateWarning" style="font-size: 0.8rem; color: var(--slate-text); margin-top: 0.4rem; font-style: italic;">
                             * Let op: het wisselen van template vervangt de huidige regels en voorwaarden.
                         </p>
                     </div>
@@ -49,51 +55,51 @@
 
                 <!-- CLIENT DETAILS -->
                 <section class="form-section">
-                    <h2>Klantgegevens</h2>
+                    <h2 data-i18n="clientDetails">Klantgegevens</h2>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="clientName">Naam contactpersoon</label>
-                            <input type="text" id="clientName" placeholder="Bijv. Jan Jansen">
+                            <label for="clientName" data-i18n="contactName">Naam contactpersoon</label>
+                            <input type="text" id="clientName" placeholder="Bijv. Jan Jansen" data-i18n-placeholder="contactNamePh">
                         </div>
                         <div class="form-group">
-                            <label for="companyName">Bedrijfsnaam</label>
-                            <input type="text" id="companyName" placeholder="Bijv. Bedrijf B.V.">
+                            <label for="companyName" data-i18n="companyName">Bedrijfsnaam</label>
+                            <input type="text" id="companyName" placeholder="Bijv. Bedrijf B.V." data-i18n-placeholder="companyNamePh">
                         </div>
                         <div class="form-group full-width">
-                            <label for="address">Adres</label>
-                            <input type="text" id="address" placeholder="Straatnaam 123">
+                            <label for="address" data-i18n="address">Adres</label>
+                            <input type="text" id="address" placeholder="Straatnaam 123" data-i18n-placeholder="addressPh">
                         </div>
                         <div class="form-group">
-                            <label for="zipCity">Postcode & Plaats</label>
-                            <input type="text" id="zipCity" placeholder="1234 AB Plaats">
+                            <label for="zipCity" data-i18n="zipCity">Postcode & Plaats</label>
+                            <input type="text" id="zipCity" placeholder="1234 AB Plaats" data-i18n-placeholder="zipCityPh">
                         </div>
                     </div>
                 </section>
 
                 <!-- QUOTE METADATA -->
                 <section class="form-section">
-                    <h2>Offerte Details</h2>
+                    <h2 data-i18n="quoteDetails">Offerte Details</h2>
                     <div class="form-group full-width" style="margin-bottom: 1rem;">
-                        <label for="introText">Inleidende tekst</label>
+                        <label for="introText" data-i18n="introTextLab">Inleidende tekst</label>
                         <textarea id="introText"
                             rows="3">Hierbij ontvangt u de offerte voor de besproken diensten. Wij kijken ernaar uit om samen met u aan de slag te gaan.</textarea>
                     </div>
                     <div class="form-grid">
                         <div class="form-group full-width">
-                            <label for="quoteTitle">Document Titel</label>
+                            <label for="quoteTitle" data-i18n="documentTitle">Document Titel</label>
                             <input type="text" id="quoteTitle" value="Offerte"
-                                placeholder="Bijv. Offerte, Projectvoorstel">
+                                placeholder="Bijv. Offerte, Projectvoorstel" data-i18n-placeholder="documentTitlePh">
                         </div>
                         <div class="form-group">
-                            <label for="quoteNumber">Offertenummer</label>
+                            <label for="quoteNumber" data-i18n="quoteNumber">Offertenummer</label>
                             <input type="text" id="quoteNumber" value="OFF-2024-001">
                         </div>
                         <div class="form-group">
-                            <label for="quoteDate">Datum</label>
+                            <label for="quoteDate" data-i18n="date">Datum</label>
                             <input type="date" id="quoteDate">
                         </div>
                         <div class="form-group">
-                            <label for="expiryDate">Geldig tot</label>
+                            <label for="expiryDate" data-i18n="validUntil">Geldig tot</label>
                             <input type="date" id="expiryDate">
                         </div>
                     </div>
@@ -101,16 +107,16 @@
 
                 <!-- LINE ITEMS -->
                 <section class="form-section">
-                    <h2>Diensten / Producten</h2>
+                    <h2 data-i18n="servicesProducts">Diensten / Producten</h2>
                     <div id="itemsContainer">
                         <!-- Items will be injected here via JS -->
                     </div>
-                    <button type="button" id="addItemBtn" class="btn btn-secondary">+ Regel toevoegen</button>
+                    <button type="button" id="addItemBtn" class="btn btn-secondary" data-i18n="addLine">+ Regel toevoegen</button>
 
                     <div class="discount-input-container"
                         style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--soft-sky);">
                         <div class="form-group" style="max-width: 200px;">
-                            <label for="discountPercent">Korting (%)</label>
+                            <label for="discountPercent" data-i18n="discount">Korting (%)</label>
                             <input type="number" id="discountPercent" value="0" min="0" max="100" step="1">
                         </div>
                     </div>
@@ -118,22 +124,22 @@
 
                 <!-- CONDITIONS/DISCLAIMERS -->
                 <section class="form-section">
-                    <h2>Afspraken & Voorwaarden</h2>
+                    <h2 data-i18n="conditionsLabel">Afspraken & Voorwaarden</h2>
                     <div id="conditionsContainer" class="conditions-grid">
                         <!-- Checkboxes injected via JS -->
                     </div>
                     <div class="custom-condition-input">
-                        <input type="text" id="customConditionInput" placeholder="Eigen afspraak toevoegen...">
+                        <input type="text" id="customConditionInput" placeholder="Eigen afspraak toevoegen..." data-i18n-placeholder="ownCondition">
                         <button type="button" id="addCustomConditionBtn"
-                            class="btn btn-secondary btn-sm">Toevoegen</button>
+                            class="btn btn-secondary btn-sm" data-i18n="addBtn">Toevoegen</button>
                     </div>
                 </section>
 
                 <!-- TERMS -->
                 <section class="form-section">
-                    <h2>Afsluiting & Voorwaarden</h2>
+                    <h2 data-i18n="closingTerms">Afsluiting & Voorwaarden</h2>
                     <div class="form-group full-width">
-                        <label for="closingText">Afsluitende tekst</label>
+                        <label for="closingText" data-i18n="closingTextLab">Afsluitende tekst</label>
                         <textarea id="closingText" rows="6">Graag zien we uw akkoord tegemoet.
 
 Op al onze offertes en overeenkomsten zijn onze algemene voorwaarden van toepassing (zie: www.zee-zicht.nl/algemene-voorwaarden/). Door ondertekening van deze offerte gaat u hiermee akkoord.
@@ -162,7 +168,7 @@ Mocht u vragen hebben naar aanleiding van deze offerte, neem dan gerust contact 
                             </div>
                         </div>
                         <div class="client-col">
-                            <div class="meta-label">Aan</div>
+                            <div class="meta-label" data-i18n="to">Aan</div>
                             <div id="previewClient">
                                 <span class="placeholder">Klantnaam</span><br>
                                 <span class="placeholder">Bedrijfsnaam</span><br>
@@ -176,15 +182,15 @@ Mocht u vragen hebben naar aanleiding van deze offerte, neem dan gerust contact 
                         <h1 id="previewTitle">Offerte</h1>
                         <div class="quote-meta-grid">
                             <div>
-                                <span class="label">Nummer</span>
+                                <span class="label" data-i18n="number">Nummer</span>
                                 <span id="previewNumber">OFF-2024-001</span>
                             </div>
                             <div>
-                                <span class="label">Datum</span>
+                                <span class="label" data-i18n="date">Datum</span>
                                 <span id="previewDate">-</span>
                             </div>
                             <div>
-                                <span class="label">Geldig tot</span>
+                                <span class="label" data-i18n="validUntilPrev">Geldig tot</span>
                                 <span id="previewExpiry">-</span>
                             </div>
                         </div>
@@ -214,7 +220,7 @@ Mocht u vragen hebben naar aanleiding van deze offerte, neem dan gerust contact 
 
                     <!-- FOOTER -->
                     <div class="quote-footer">
-                        <h3>Akkoordverklaring</h3>
+                        <h3 data-i18n="declarationOfAgreement">Akkoordverklaring</h3>
                         <div id="previewConditionsContainer" class="quote-conditions">
                             <!-- Selected conditions injected via JS -->
                         </div>
@@ -224,10 +230,10 @@ Mocht u vragen hebben naar aanleiding van deze offerte, neem dan gerust contact 
 
                         <div class="sign-block">
                             <div class="sign-line">
-                                <span>Datum</span>
+                                <span data-i18n="date">Datum</span>
                             </div>
                             <div class="sign-line">
-                                <span>Handtekening</span>
+                                <span data-i18n="signature">Handtekening</span>
                             </div>
                         </div>
                     </div>
