@@ -374,33 +374,33 @@ document.addEventListener('DOMContentLoaded', () => {
             div.className = 'line-item-row';
             div.innerHTML = `
                 <div class="form-group">
-                    <label>\${I18N[state.language].typeLabel}</label>
-                    <select onchange="window.updateItemCtx(\${item.id}, 'type', this.value)">
-                        <option value="onetime" \${item.type === 'onetime' ? 'selected' : ''}>\${I18N[state.language].onetime}</option>
-                        <option value="monthly" \${item.type === 'monthly' ? 'selected' : ''}>\${I18N[state.language].monthly}</option>
-                        <option value="hourly" \${item.type === 'hourly' ? 'selected' : ''}>\${I18N[state.language].hourly}</option>
+                    <label>${I18N[state.language].typeLabel}</label>
+                    <select onchange="window.updateItemCtx(${item.id}, 'type', this.value)">
+                        <option value="onetime" ${item.type === 'onetime' ? 'selected' : ''}>${I18N[state.language].onetime}</option>
+                        <option value="monthly" ${item.type === 'monthly' ? 'selected' : ''}>${I18N[state.language].monthly}</option>
+                        <option value="hourly" ${item.type === 'hourly' ? 'selected' : ''}>${I18N[state.language].hourly}</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>\${I18N[state.language].colDesc}</label>
-                    <input type="text" value="\${item.desc}" oninput="window.updateItemCtx(\${item.id}, 'desc', this.value)" placeholder="\${I18N[state.language].colDesc}">
+                    <label>${I18N[state.language].colDesc}</label>
+                    <input type="text" value="${item.desc}" oninput="window.updateItemCtx(${item.id}, 'desc', this.value)" placeholder="${I18N[state.language].colDesc}">
                 </div>
                 <div class="form-group">
-                    <label>\${I18N[state.language].qtyLabel}</label>
-                    <input type="number" value="\${item.qty}" oninput="window.updateItemCtx(\${item.id}, 'qty', this.value)" step="0.5">
+                    <label>${I18N[state.language].qtyLabel}</label>
+                    <input type="number" value="${item.qty}" oninput="window.updateItemCtx(${item.id}, 'qty', this.value)" step="0.5">
                 </div>
                 <div class="form-group">
-                    <label>\${I18N[state.language].rateEuro}</label>
-                    <input type="number" value="\${item.rate}" oninput="window.updateItemCtx(\${item.id}, 'rate', this.value)">
+                    <label>${I18N[state.language].rateEuro}</label>
+                    <input type="number" value="${item.rate}" oninput="window.updateItemCtx(${item.id}, 'rate', this.value)">
                 </div>
                 <div class="form-group">
-                     <button type="button" class="btn btn-danger" onclick="window.removeItemCtx(\${item.id})" style="padding: 0.7rem; margin-top: auto;">
+                     <button type="button" class="btn btn-danger" onclick="window.removeItemCtx(${item.id})" style="padding: 0.7rem; margin-top: auto;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                      </button>
                 </div>
                 <div class="form-group" style="grid-column: 1 / -1; margin-top: 0.5rem; margin-bottom: 0 !important;">
-                    <label>\${I18N[state.language].specsOpt}</label>
-                    <textarea rows="2" placeholder="- Specificatie 1\n- Specificatie 2" oninput="window.updateItemCtx(\${item.id}, 'details', this.value)" style="font-size: 0.85rem;">\${item.details || ''}</textarea>
+                    <label>${I18N[state.language].specsOpt}</label>
+                    <textarea rows="2" placeholder="- Specificatie 1\n- Specificatie 2" oninput="window.updateItemCtx(${item.id}, 'details', this.value)" style="font-size: 0.85rem;">${item.details || ''}</textarea>
                 </div>
             `;
             form.itemsContainer.appendChild(div);
@@ -430,8 +430,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const label = document.createElement('label');
                     label.className = 'condition-checkbox-label';
                     label.innerHTML = `
-                        <input type="checkbox" \${isChecked ? 'checked' : ''} onchange="window.toggleConditionCtx(\${cond.id})">
-                        <span>\${state.language === 'en' ? (cond.text_en || cond.text_nl) : cond.text_nl}</span>
+                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="window.toggleConditionCtx(${cond.id})">
+                        <span>${state.language === 'en' ? (cond.text_en || cond.text_nl) : cond.text_nl}</span>
                     `;
                     form.conditionsContainer.appendChild(label);
                 });
@@ -457,9 +457,9 @@ document.addEventListener('DOMContentLoaded', () => {
             div.innerHTML = `
                 <label class="condition-checkbox-label" style="flex:1">
                     <input type="checkbox" checked disabled>
-                    <span>\${cond.text || cond.text_nl}</span>
+                    <span>${cond.text || cond.text_nl}</span>
                 </label>
-                <button type="button" class="remove-condition-btn" onclick="window.removeCustomConditionCtx('\${cond.id}')">
+                <button type="button" class="remove-condition-btn" onclick="window.removeCustomConditionCtx('${cond.id}')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             `;
@@ -504,20 +504,20 @@ document.addEventListener('DOMContentLoaded', () => {
             if (item.details && item.details.trim() !== '') {
                 const bulletLines = item.details.split('\n').filter(line => line.trim() !== '');
                 if (bulletLines.length > 0) {
-                    const bullets = bulletLines.map(line => `<li>\${line.startsWith('-') ? line.substring(1).trim() : line}</li>`).join('');
-                    detailsHtml = `<ul style="margin-top: 0.4rem; margin-bottom: 0; padding-left: 1.2rem; font-size: 0.85rem; color: var(--slate-text);">\${bullets}</ul>`;
+                    const bullets = bulletLines.map(line => `<li>${line.startsWith('-') ? line.substring(1).trim() : line}</li>`).join('');
+                    detailsHtml = `<ul style="margin-top: 0.4rem; margin-bottom: 0; padding-left: 1.2rem; font-size: 0.85rem; color: var(--slate-text);">${bullets}</ul>`;
                 }
             }
 
             rowsHtml += `
                 <tr>
                     <td>
-                        <div style="font-weight: 500;">\${item.desc || '-'}</div>
-                        \${detailsHtml}
+                        <div style="font-weight: 500;">${item.desc || '-'}</div>
+                        ${detailsHtml}
                     </td>
-                    <td class="text-center">\${item.qty}</td>
-                    <td class="text-right">\${rateDisplay}</td>
-                    <td class="text-right">\${formatCurrency(lineTotal)}</td>
+                    <td class="text-center">${item.qty}</td>
+                    <td class="text-right">${rateDisplay}</td>
+                    <td class="text-right">${formatCurrency(lineTotal)}</td>
                 </tr>
             `;
         });
@@ -532,52 +532,52 @@ document.addEventListener('DOMContentLoaded', () => {
         if (discountEnabled) {
             discountRowHtml = `
                 <tr class="summary-row">
-                    <td colspan="3" class="text-right">\${t.discount} (\${state.discountPercent}%)</td>
-                    <td class="text-right">-\${formatCurrency(discountAmount)}</td>
+                    <td colspan="3" class="text-right">${t.discount} (${state.discountPercent}%)</td>
+                    <td class="text-right">-${formatCurrency(discountAmount)}</td>
                 </tr>
             `;
         }
 
         let footerNote = '';
         if (isMonthly) {
-            footerNote = `<p style="font-size: 0.8rem; color: var(--slate-text); margin-top: 0.5rem; font-style: italic;">\${t.monthlyFootnote}</p>`;
+            footerNote = `<p style="font-size: 0.8rem; color: var(--slate-text); margin-top: 0.5rem; font-style: italic;">${t.monthlyFootnote}</p>`;
         } else {
             const note = customNote || (state.language === 'en' ? 'Payment terms: 50% upon agreement, 50% upon delivery.' : 'Betalingstermijn: 50% bij akkoord, 50% bij oplevering.');
-            footerNote = `<p style="font-size: 0.8rem; color: var(--slate-text); margin-top: 0.5rem; font-style: italic;">* \${note}</p>`;
+            footerNote = `<p style="font-size: 0.8rem; color: var(--slate-text); margin-top: 0.5rem; font-style: italic;">* ${note}</p>`;
         }
 
         return `
             <div class="quote-section">
-                <h3 class="section-title">\${title}</h3>
+                <h3 class="section-title">${title}</h3>
                 <table class="quote-table">
                     <thead>
                         <tr>
-                            <th class="col-desc">\${t.colDesc}</th>
-                            <th class="col-qty">\${t.colQty}</th>
-                            <th class="col-rate">\${t.colRate}</th>
-                            <th class="col-total">\${isMonthly ? t.colTotal12 : t.colTotal}</th>
+                            <th class="col-desc">${t.colDesc}</th>
+                            <th class="col-qty">${t.colQty}</th>
+                            <th class="col-rate">${t.colRate}</th>
+                            <th class="col-total">${isMonthly ? t.colTotal12 : t.colTotal}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        \${rowsHtml}
+                        ${rowsHtml}
                     </tbody>
                     <tfoot>
                         <tr class="summary-row">
-                            <td colspan="3" class="text-right">\${t.subtotal}</td>
-                            <td class="text-right">\${formatCurrency(subtotal)}</td>
+                            <td colspan="3" class="text-right">${t.subtotal}</td>
+                            <td class="text-right">${formatCurrency(subtotal)}</td>
                         </tr>
-                        \${discountRowHtml}
+                        ${discountRowHtml}
                         <tr class="summary-row">
-                            <td colspan="3" class="text-right">\${t.vat}</td>
-                            <td class="text-right">\${formatCurrency(vat)}</td>
+                            <td colspan="3" class="text-right">${t.vat}</td>
+                            <td class="text-right">${formatCurrency(vat)}</td>
                         </tr>
                          <tr class="total-row">
-                            <td colspan="3" class="text-right">\${t.total}</td>
-                            <td class="text-right" style="color:var(--theme-accent)">\${formatCurrency(total)}</td>
+                            <td colspan="3" class="text-right">${t.total}</td>
+                            <td class="text-right" style="color:var(--theme-accent)">${formatCurrency(total)}</td>
                         </tr>
                     </tfoot>
                 </table>
-                \${footerNote}
+                ${footerNote}
             </div>
         `;
     }
@@ -585,11 +585,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function updatePreview() {
         // Client Info
         const clientHtml = [
-            state.companyName ? `<strong>\${state.companyName}</strong>` : '',
-            state.clientName ? `${state.language === 'en' ? 'attn.' : 't.a.v.'} \${state.clientName}` : '',
+            state.companyName ? `<strong>${state.companyName}</strong>` : '',
+            state.clientName ? `${state.language === 'en' ? 'attn.' : 't.a.v.'} ${state.clientName}` : '',
             state.address,
             state.zipCity
-        ].filter(Boolean).join('<br>') || `<span class="placeholder" style="color:#ccc">\${state.language === 'en' ? 'Client details will appear here...' : 'Klantgegevens verschijnen hier...'}</span>`;
+        ].filter(Boolean).join('<br>') || `<span class="placeholder" style="color:#ccc">${state.language === 'en' ? 'Client details will appear here...' : 'Klantgegevens verschijnen hier...'}</span>`;
 
         preview.client.innerHTML = clientHtml;
 
@@ -627,16 +627,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (state.selectedConditions.length > 0 || state.customConditions.length > 0) {
             const predefinedText = CONDITIONS
                 .filter(c => state.selectedConditions.includes(c.id))
-                .map(c => `<li>\${state.language === 'en' ? (c.text_en || c.text_nl) : c.text_nl}</li>`)
+                .map(c => `<li>${state.language === 'en' ? (c.text_en || c.text_nl) : c.text_nl}</li>`)
                 .join('');
 
             const customText = state.customConditions
-                .map(c => `<li>\${c.text || c.text_nl}</li>`)
+                .map(c => `<li>${c.text || c.text_nl}</li>`)
                 .join('');
 
             preview.conditionsContainer.innerHTML = `
-                <h4>\${I18N[state.language].additionalAgreements}</h4>
-                <ul>\${predefinedText}\${customText}</ul>
+                <h4>${I18N[state.language].additionalAgreements}</h4>
+                <ul>${predefinedText}${customText}</ul>
             `;
         } else {
             preview.conditionsContainer.innerHTML = '';
@@ -653,8 +653,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const linkedText = safeText.replace(
             /((https?:\/\/|www\.)[^\s)]+)/g,
             (url) => {
-                const href = url.startsWith('http') ? url : `https://\${url}`;
-                return `<a href="\${href}" target="_blank" style="text-decoration:underline; color:inherit;">\${url}</a>`;
+                const href = url.startsWith('http') ? url : `https://${url}`;
+                return `<a href="${href}" target="_blank" style="text-decoration:underline; color:inherit;">${url}</a>`;
             }
         );
 
@@ -673,7 +673,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const safeDocTitle = docTitle.replace(/[^a-z0-9\s-]/gi, '').trim();
         const safeNumber = number.replace(/[^a-z0-9\s-]/gi, '').trim();
 
-        document.title = `\${safeDocTitle} \${safeClient} - \${safeNumber}`;
+        document.title = `${safeDocTitle} ${safeClient} - ${safeNumber}`;
 
         window.print();
 
