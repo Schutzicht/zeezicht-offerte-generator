@@ -52,6 +52,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const getDailyQuoteNumber = () => {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        const dateStr = `${yyyy}${mm}${dd}`;
+        
+        let lastDate = localStorage.getItem('lastQuoteDate');
+        let seq = parseInt(localStorage.getItem('quoteSeq') || '0', 10);
+        
+        if (lastDate !== dateStr) {
+            seq = 1;
+            localStorage.setItem('lastQuoteDate', dateStr);
+        } else {
+            seq++;
+        }
+        localStorage.setItem('quoteSeq', seq);
+        
+        return `OFF-${dateStr}-${String(seq).padStart(2, '0')}`;
+    };
+
     // STATE
     const state = {
         language: 'nl',
@@ -60,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         address: '',
         zipCity: '',
         quoteTitle: 'Offerte',
-        quoteNumber: `OFF-${new Date().getFullYear()}-001`,
+        quoteNumber: getDailyQuoteNumber(),
         quoteDate: new Date().toISOString().split('T')[0],
         expiryDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // +14 days default
         introText: I18N.nl.defaultIntro,
